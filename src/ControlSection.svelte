@@ -1,11 +1,27 @@
 <script>
     import { steps } from './store.js';
     import { startSequence, stopSequence, pauseSequence } from './playSequence.js';
+    import { muteGroup } from './Channel.svelte';
 
     let tempo = 120; // Ensure this is at the top
     let currentStep = 0; // <-- Reintroduce this line
+    let masterMuteGroup = [false, false, false, false];
+    let channelAssignments = Array(16).fill(-1); // Assuming there are 16 channels. All unassigned initially.
+    let channelMuteStates = Array(16).fill(false); // Initially, no channels are muted.
 
+    function toggleMasterMute(index) {
+        masterMuteGroup[index] = !masterMuteGroup[index];
+        console.log(`Mute Group Master ${index + 1} ${masterMuteGroup[index] ? 'activated' : 'deactivated'}`);
 
+        for (let i = 0; i < channelAssignments.length; i++) {
+            if (channelAssignments[i] === index) {
+                channelMuteStates[i] = masterMuteGroup[index]; // Set channel's mute state based on its master mute group state
+            }
+        }
+
+        // Now, the channelMuteStates array has updated mute states for all channels assigned to the clicked mute group.
+        // You can use this array to actually mute/unmute channels in your audio logic.
+    }
 
    
 
@@ -48,8 +64,6 @@ function togglePlay() {
         return (currentStep + 1) % steps.length; // Return the incremented value
     }
 
-
-    let muteGroup = [false, false, false, false]; 
 </script>
 
 
@@ -86,13 +100,10 @@ function togglePlay() {
 <!-- Mute Group Masters -->
 <div class="mute-group-master" style="width: 95%;">
     <h3>Mute Group Masters</h3>
-    {#each muteGroup as group, index}
+    {#each masterMuteGroup as group, index} <!-- Using masterMuteGroup here -->
         <button 
             class:active={group}
-            on:click={() => {
-                muteGroup[index] = !muteGroup[index];
-                console.log(`Mute Group Master ${index + 1} clicked`);
-            }}
+            on:click={() => toggleMasterMute(index)}
         >
             Master {index + 1}
         </button>
@@ -135,9 +146,5 @@ function togglePlay() {
         margin-right: 5px;
     }
 
-    .mute-group h4 {
-        font-size: 1.1em;
-        margin-top: 10px;
-        margin-bottom: 5px;
-    }
+
 </style>

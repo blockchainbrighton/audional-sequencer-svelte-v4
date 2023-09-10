@@ -1177,7 +1177,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (80:16) {#each muteGroup as group, index}
+    // (81:16) {#each muteGroup as group, index}
     function create_each_block_1(ctx) {
     	let button;
     	let t0_value = /*index*/ ctx[19] + 1 + "";
@@ -1201,7 +1201,7 @@ var app = (function () {
     			t1 = space();
     			attr_dev(button, "class", "btn-mute-group svelte-1a20j48");
     			toggle_class(button, "active", /*group*/ ctx[20]);
-    			add_location(button, file, 80, 20, 2590);
+    			add_location(button, file, 81, 20, 2599);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -1235,14 +1235,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(80:16) {#each muteGroup as group, index}",
+    		source: "(81:16) {#each muteGroup as group, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (91:12) {#each $steps as step, index}
+    // (92:12) {#each $steps as step, index}
     function create_each_block(ctx) {
     	let button;
     	let button_class_value;
@@ -1257,7 +1257,7 @@ var app = (function () {
     		c: function create() {
     			button = element("button");
     			attr_dev(button, "class", button_class_value = "" + (null_to_empty(/*step*/ ctx[17] ? 'active btn-step' : 'btn-step') + " svelte-1a20j48"));
-    			add_location(button, file, 91, 16, 2984);
+    			add_location(button, file, 92, 16, 2993);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -1285,7 +1285,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(91:12) {#each $steps as step, index}",
+    		source: "(92:12) {#each $steps as step, index}",
     		ctx
     	});
 
@@ -1350,23 +1350,23 @@ var app = (function () {
 
     			attr_dev(button0, "class", "load svelte-1a20j48");
     			toggle_class(button0, "active", /*loadActive*/ ctx[4]);
-    			add_location(button0, file, 47, 8, 1470);
+    			add_location(button0, file, 48, 8, 1479);
     			attr_dev(button1, "class", "btn-solo svelte-1a20j48");
     			toggle_class(button1, "active", /*soloActive*/ ctx[1]);
-    			add_location(button1, file, 56, 12, 1737);
+    			add_location(button1, file, 57, 12, 1746);
     			attr_dev(button2, "class", "btn-mute svelte-1a20j48");
     			toggle_class(button2, "active", /*muteActive*/ ctx[2]);
-    			add_location(button2, file, 66, 12, 2060);
+    			add_location(button2, file, 67, 12, 2069);
     			attr_dev(div0, "class", "mute-group svelte-1a20j48");
-    			add_location(div0, file, 77, 12, 2479);
+    			add_location(div0, file, 78, 12, 2488);
     			attr_dev(div1, "class", "steps svelte-1a20j48");
-    			add_location(div1, file, 55, 8, 1705);
+    			add_location(div1, file, 56, 8, 1714);
     			attr_dev(div2, "class", "controls svelte-1a20j48");
-    			add_location(div2, file, 46, 4, 1439);
+    			add_location(div2, file, 47, 4, 1448);
     			attr_dev(div3, "class", "channel svelte-1a20j48");
     			attr_dev(div3, "data-id", "Channel-1");
     			set_style(div3, "width", "95%");
-    			add_location(div3, file, 45, 0, 1373);
+    			add_location(div3, file, 46, 0, 1382);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1495,7 +1495,7 @@ var app = (function () {
     	component_subscribe($$self, steps, $$value => $$invalidate(3, $steps = $$value));
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots('Channel', slots, []);
-    	let muteGroup = [false, false, false, false];
+    	let { muteGroup = [false, false, false, false] } = $$props;
     	let loadActive = false;
     	let soloActive = false;
     	let muteActive = $muteState; // Bind local variable to global state
@@ -1530,7 +1530,7 @@ var app = (function () {
     		}
     	}
 
-    	const writable_props = [];
+    	const writable_props = ['muteGroup'];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== '$$' && key !== 'slot') console_1.warn(`<Channel> was created with unknown prop '${key}'`);
@@ -1552,6 +1552,10 @@ var app = (function () {
     	const click_handler_3 = index => toggleMute(index);
     	const keydown_handler = (index, e) => handleKeydown(e, index);
     	const click_handler_4 = index => toggleStep(index);
+
+    	$$self.$$set = $$props => {
+    		if ('muteGroup' in $$props) $$invalidate(0, muteGroup = $$props.muteGroup);
+    	};
 
     	$$self.$capture_state = () => ({
     		loadSample,
@@ -1603,7 +1607,7 @@ var app = (function () {
     class Channel extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$1, create_fragment$1, safe_not_equal, {});
+    		init(this, options, instance$1, create_fragment$1, safe_not_equal, { muteGroup: 0 });
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -1611,6 +1615,14 @@ var app = (function () {
     			options,
     			id: create_fragment$1.name
     		});
+    	}
+
+    	get muteGroup() {
+    		throw new Error("<Channel>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set muteGroup(value) {
+    		throw new Error("<Channel>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
 

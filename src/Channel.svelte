@@ -1,15 +1,13 @@
 <script>
     import { loadSample } from './audioLoader.js';
-    import { steps, muteState } from './store.js'; // <-- Import muteState
+    import { steps, muteState } from './store.js';
     import { gainNode } from './audioContext.js';
+    export let muteGroup = [[], [], [], []]; // Each mute group is an array of channel IDs
 
-
-  
-    let muteGroup = [false, false, false, false];
     let loadActive = false;
     let soloActive = false;
-    let muteActive = $muteState; // Bind local variable to global state
-
+    let muteActive = $muteState;
+    let channelId = 1; // Initial value, but it will be overwritten by the Svelte markup
 
     function toggleStep(index) {
         steps.update(currentSteps => {
@@ -19,30 +17,28 @@
         });
     }
 
-    function toggleMute(index) {
-        muteGroup[index] = !muteGroup[index];
-        console.log(`Mute Group ${index + 1} ${muteGroup[index] ? 'muted' : 'unmuted'}`);
-    }
-
-    function handleKeydown(e, index) {
-        if (e.key === 'Enter' || e.key === ' ') {
-            toggleMute(index);
-        } 
-    }
-
-    // Function to handle muting and unmuting using the GainNode
-    function handleMute() {
-        $muteState = muteActive; // Update the global mute state directly
-        if (muteActive) {
-            gainNode.gain.value = 0; // Mute the sound
+    function toggleMuteGroupState(channelId, groupId) {
+        if (muteGroup[groupId].includes(channelId)) {
+            muteGroup[groupId] = muteGroup[groupId].filter(id => id !== channelId);
+            console.log(`Channel ${channelId} removed from Mute Group ${groupId + 1}`);
         } else {
-            gainNode.gain.value = 1; // Restore the original volume
+            muteGroup[groupId].push(channelId);
+            console.log(`Channel ${channelId} added to Mute Group ${groupId + 1}`);
         }
+    }
+
+    function toggleChannelMute() {
+        muteActive = !muteActive;
+        $muteState = muteActive;
+        if (muteActive) {
+            gainNode.gain.value = 0;
+        } else {
+            gainNode.gain.value = 1;
+        }
+        console.log(`Channel Mute ${muteActive ? 'activated' : 'deactivated'}`);
     }
 </script>
 
-
-<!-- Channel Mute Group Buttons and Controls -->
 <div class="channel" data-id="Channel-1" style="width: 95%;">
     <div class="controls">
         <button
@@ -52,39 +48,36 @@
         >
             Load
         </button>
-       
+
         <div class="steps">
             <button
-                class:active={soloActive} class="btn-solo"
+                class:active={soloActive} 
+                class="btn-solo"
                 on:click={() => {
                     soloActive = !soloActive;
                     console.log(`Solo ${soloActive ? 'activated' : 'deactivated'}`);
-                }}  
+                }}
             >
                 Solo
             </button>
 
             <button
-                class:active={muteActive} class="btn-mute"
-                on:click={() => {
-                    muteActive = !muteActive;
-                    handleMute(); // Call the handleMute function when the mute button is clicked
-                    console.log(`Mute ${muteActive ? 'activated' : 'deactivated'}`);
-                }}
+                class:active={muteActive} 
+                class="btn-channel-mute"
+                on:click={toggleChannelMute}
             >
-                Mute
+                Channel Mute
             </button>
 
             <div class="mute-group">
-               
                 {#each muteGroup as group, index}
-                    <button 
-                        class:active={group} class="btn-mute-group"
-                        on:click={() => toggleMute(index)}
-                        on:keydown={(e) => handleKeydown(e, index)}
-                    >
-                        {index + 1}
-                    </button>
+                <button 
+                    class:active={group.includes(channelId)} 
+                    class="btn-mute-group"
+                    on:click={() => toggleMuteGroupState(channelId, index)}
+                >
+                    {index + 1}
+                </button>
                 {/each}
             </div>
 
@@ -98,6 +91,7 @@
         </div>
     </div>
 </div>
+
 
 <style>
     .controls {
@@ -139,10 +133,6 @@
         color: white;
     }
 
-    .steps button.btn-mute, .steps button.btn-mute-group.active {
-        background-color: rgb(179, 2, 2);
-        color: white;
-    }
 
     button.active {
         filter: brightness(150%);

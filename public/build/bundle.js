@@ -631,22 +631,9 @@ var app = (function () {
         return audioBuffers.get(sampleUrl);
     }
 
-    console.log('audioContext initialized in playSequence.');
-
-    let currentMuteState = false;
-    muteState.subscribe(value => currentMuteState = value);  // Subscribe to the muteState store
-
-
     let isPlaying = false;
     let intervalId;
-    let currentStep = 1; // <-- Add this line
-
-
-
-
-
-
-
+    let currentStep = 1;
 
     function playSample$1(volume) {
         console.log('AudioContext state before playing:', audioContext.state);
@@ -660,12 +647,6 @@ var app = (function () {
         }
 
         console.log('Buffer to play:', buffer);
-        // Check the mute state and set the gain value
-        if (currentMuteState) { // <-- Use currentMuteState here
-            gainNode.gain.value = 0;
-        } else {
-            gainNode.gain.value = volume / 100;
-        }
 
         const source = audioContext.createBufferSource();
         source.buffer = buffer;
@@ -673,12 +654,8 @@ var app = (function () {
         console.log('Buffer duration:', buffer.duration);
         console.log('Buffer sampleRate:', buffer.sampleRate);
         console.log('Buffer numberOfChannels:', buffer.numberOfChannels);
-
-        // Volume control
-        gainNode.gain.value = volume / 100;  // Assuming volume is between 0 and 100
-        console.log('Volume set to:', gainNode.gain.value);
         
-        source.connect(gainNode); // Connect the source to the gain node
+        source.connect(gainNode);  // Connect the source to the gain node
 
         console.log('About to play sample...');
         source.start(0);    
@@ -704,11 +681,7 @@ var app = (function () {
 
 
 
-    function startSequence(steps, initialStep, volume) {
-        if (currentMuteState) {  // Check the global mute state
-            gainNode.gain.value = 0; // Ensure mute is active if muteActive is true
-        }
-        
+    function startSequence(steps, initialStep, volume) { 
         if (!isPlaying) {
             currentStep = initialStep; // <-- Add this line
             isPlaying = true;
@@ -799,7 +772,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (87:4) {#each muteGroup as group, index}
+    // (89:4) {#each muteGroup as group, index}
     function create_each_block$1(ctx) {
     	let button;
     	let t0;
@@ -816,12 +789,12 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			button = element("button");
-    			t0 = text("Mute Group ");
+    			t0 = text("Master ");
     			t1 = text(t1_value);
     			t2 = space();
-    			attr_dev(button, "class", "svelte-zfp9j9");
+    			attr_dev(button, "class", "svelte-1716yd8");
     			toggle_class(button, "active", /*group*/ ctx[15]);
-    			add_location(button, file$1, 87, 8, 2386);
+    			add_location(button, file$1, 89, 8, 2446);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -852,7 +825,7 @@ var app = (function () {
     		block,
     		id: create_each_block$1.name,
     		type: "each",
-    		source: "(87:4) {#each muteGroup as group, index}",
+    		source: "(89:4) {#each muteGroup as group, index}",
     		ctx
     	});
 
@@ -874,6 +847,8 @@ var app = (function () {
     	let input1;
     	let t7;
     	let div1;
+    	let h3;
+    	let t9;
     	let mounted;
     	let dispose;
     	let each_value = /*muteGroup*/ ctx[3];
@@ -902,35 +877,40 @@ var app = (function () {
     			input1 = element("input");
     			t7 = space();
     			div1 = element("div");
+    			h3 = element("h3");
+    			h3.textContent = "Mute Group Masters";
+    			t9 = space();
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(button0, "class", "play svelte-zfp9j9");
+    			attr_dev(button0, "class", "play svelte-1716yd8");
     			toggle_class(button0, "active", /*playing*/ ctx[1]);
     			add_location(button0, file$1, 58, 4, 1647);
-    			attr_dev(button1, "class", "stop svelte-zfp9j9");
+    			attr_dev(button1, "class", "stop svelte-1716yd8");
     			toggle_class(button1, "active", !/*playing*/ ctx[1]);
     			add_location(button1, file$1, 68, 4, 1849);
     			attr_dev(input0, "type", "range");
     			attr_dev(input0, "min", "0");
     			attr_dev(input0, "max", "100");
     			add_location(input0, file$1, 78, 16, 2076);
-    			attr_dev(label0, "class", "svelte-zfp9j9");
+    			attr_dev(label0, "class", "svelte-1716yd8");
     			add_location(label0, file$1, 77, 4, 2052);
     			attr_dev(input1, "type", "range");
     			attr_dev(input1, "min", "60");
     			attr_dev(input1, "max", "180");
     			add_location(input1, file$1, 81, 15, 2177);
-    			attr_dev(label1, "class", "svelte-zfp9j9");
+    			attr_dev(label1, "class", "svelte-1716yd8");
     			add_location(label1, file$1, 80, 4, 2154);
-    			attr_dev(div0, "class", "control-section svelte-zfp9j9");
+    			attr_dev(div0, "class", "control-section svelte-1716yd8");
     			set_style(div0, "width", "95%");
     			add_location(div0, file$1, 57, 0, 1593);
-    			attr_dev(div1, "class", "mute-group-master svelte-zfp9j9");
+    			attr_dev(h3, "class", "svelte-1716yd8");
+    			add_location(h3, file$1, 87, 4, 2372);
+    			attr_dev(div1, "class", "mute-group-master svelte-1716yd8");
     			set_style(div1, "width", "95%");
-    			add_location(div1, file$1, 85, 0, 2288);
+    			add_location(div1, file$1, 86, 0, 2316);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -952,6 +932,8 @@ var app = (function () {
     			set_input_value(input1, /*tempo*/ ctx[0]);
     			insert_dev(target, t7, anchor);
     			insert_dev(target, div1, anchor);
+    			append_dev(div1, h3);
+    			append_dev(div1, t9);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
     				if (each_blocks[i]) {
@@ -1113,7 +1095,7 @@ var app = (function () {
 
     	const click_handler_2 = index => {
     		$$invalidate(3, muteGroup[index] = !muteGroup[index], muteGroup);
-    		console.log(`Mute Group ${index + 1} clicked`);
+    		console.log(`Mute Group Master ${index + 1} clicked`);
     	};
 
     	$$self.$capture_state = () => ({
@@ -1195,7 +1177,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (77:16) {#each muteGroup as group, index}
+    // (80:16) {#each muteGroup as group, index}
     function create_each_block_1(ctx) {
     	let button;
     	let t0_value = /*index*/ ctx[19] + 1 + "";
@@ -1217,9 +1199,9 @@ var app = (function () {
     			button = element("button");
     			t0 = text(t0_value);
     			t1 = space();
-    			attr_dev(button, "class", "btn-mute-group svelte-tr5gps");
+    			attr_dev(button, "class", "btn-mute-group svelte-1a20j48");
     			toggle_class(button, "active", /*group*/ ctx[20]);
-    			add_location(button, file, 77, 20, 2524);
+    			add_location(button, file, 80, 20, 2590);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -1253,14 +1235,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(77:16) {#each muteGroup as group, index}",
+    		source: "(80:16) {#each muteGroup as group, index}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (88:12) {#each $steps as step, index}
+    // (91:12) {#each $steps as step, index}
     function create_each_block(ctx) {
     	let button;
     	let button_class_value;
@@ -1274,8 +1256,8 @@ var app = (function () {
     	const block = {
     		c: function create() {
     			button = element("button");
-    			attr_dev(button, "class", button_class_value = "" + (null_to_empty(/*step*/ ctx[17] ? 'active btn-step' : 'btn-step') + " svelte-tr5gps"));
-    			add_location(button, file, 88, 16, 2918);
+    			attr_dev(button, "class", button_class_value = "" + (null_to_empty(/*step*/ ctx[17] ? 'active btn-step' : 'btn-step') + " svelte-1a20j48"));
+    			add_location(button, file, 91, 16, 2984);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -1288,7 +1270,7 @@ var app = (function () {
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
 
-    			if (dirty & /*$steps*/ 8 && button_class_value !== (button_class_value = "" + (null_to_empty(/*step*/ ctx[17] ? 'active btn-step' : 'btn-step') + " svelte-tr5gps"))) {
+    			if (dirty & /*$steps*/ 8 && button_class_value !== (button_class_value = "" + (null_to_empty(/*step*/ ctx[17] ? 'active btn-step' : 'btn-step') + " svelte-1a20j48"))) {
     				attr_dev(button, "class", button_class_value);
     			}
     		},
@@ -1303,7 +1285,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(88:12) {#each $steps as step, index}",
+    		source: "(91:12) {#each $steps as step, index}",
     		ctx
     	});
 
@@ -1366,25 +1348,25 @@ var app = (function () {
     				each_blocks[i].c();
     			}
 
-    			attr_dev(button0, "class", "load svelte-tr5gps");
+    			attr_dev(button0, "class", "load svelte-1a20j48");
     			toggle_class(button0, "active", /*loadActive*/ ctx[4]);
-    			add_location(button0, file, 45, 8, 1420);
-    			attr_dev(button1, "class", "btn-solo svelte-tr5gps");
+    			add_location(button0, file, 47, 8, 1470);
+    			attr_dev(button1, "class", "btn-solo svelte-1a20j48");
     			toggle_class(button1, "active", /*soloActive*/ ctx[1]);
-    			add_location(button1, file, 54, 12, 1687);
-    			attr_dev(button2, "class", "btn-mute svelte-tr5gps");
+    			add_location(button1, file, 56, 12, 1737);
+    			attr_dev(button2, "class", "btn-mute svelte-1a20j48");
     			toggle_class(button2, "active", /*muteActive*/ ctx[2]);
-    			add_location(button2, file, 64, 12, 2010);
-    			attr_dev(div0, "class", "mute-group svelte-tr5gps");
-    			add_location(div0, file, 75, 12, 2429);
-    			attr_dev(div1, "class", "steps svelte-tr5gps");
-    			add_location(div1, file, 53, 8, 1655);
-    			attr_dev(div2, "class", "controls svelte-tr5gps");
-    			add_location(div2, file, 44, 4, 1389);
-    			attr_dev(div3, "class", "channel svelte-tr5gps");
+    			add_location(button2, file, 66, 12, 2060);
+    			attr_dev(div0, "class", "mute-group svelte-1a20j48");
+    			add_location(div0, file, 77, 12, 2479);
+    			attr_dev(div1, "class", "steps svelte-1a20j48");
+    			add_location(div1, file, 55, 8, 1705);
+    			attr_dev(div2, "class", "controls svelte-1a20j48");
+    			add_location(div2, file, 46, 4, 1439);
+    			attr_dev(div3, "class", "channel svelte-1a20j48");
     			attr_dev(div3, "data-id", "Channel-1");
     			set_style(div3, "width", "95%");
-    			add_location(div3, file, 43, 0, 1323);
+    			add_location(div3, file, 45, 0, 1373);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");

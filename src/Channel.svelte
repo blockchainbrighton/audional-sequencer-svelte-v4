@@ -41,6 +41,8 @@
     }
 </script>
 
+
+<!-- Channel Mute Group Buttons and Controls -->
 <div class="channel" data-id="Channel-1" style="width: 95%;">
     <div class="controls">
         <button
@@ -74,6 +76,7 @@
             </button>
 
             <div class="mute-group">
+               
                 {#each muteGroup as group, index}
                     <button 
                         class:active={group} class="btn-mute-group"
@@ -133,13 +136,16 @@
 
     .steps button.btn-solo {
         background-color: rgb(176, 176, 4);
+        color: white;
     }
 
     .steps button.btn-mute, .steps button.btn-mute-group.active {
         background-color: rgb(179, 2, 2);
+        color: white;
     }
 
     button.active {
         filter: brightness(150%);
     }
+   
 </style>

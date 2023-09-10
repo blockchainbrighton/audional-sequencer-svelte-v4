@@ -83,16 +83,18 @@ function togglePlay() {
     </label>
 </div>
 
+<!-- Mute Group Masters -->
 <div class="mute-group-master" style="width: 95%;">
+    <h3>Mute Group Masters</h3>
     {#each muteGroup as group, index}
         <button 
             class:active={group}
             on:click={() => {
                 muteGroup[index] = !muteGroup[index];
-                console.log(`Mute Group ${index + 1} clicked`);
+                console.log(`Mute Group Master ${index + 1} clicked`);
             }}
         >
-            Mute Group {index + 1}
+            Master {index + 1}
         </button>
     {/each}
 </div>
@@ -108,14 +110,7 @@ function togglePlay() {
         flex-basis: 0;
     }
 
-    .mute-group-master {
-        display: flex;
-    }
-
-    .mute-group-master button {
-        background-color: rgb(179, 2, 2);
-        flex: 1;
-    }
+   
 
     button.active {
         filter: brightness(150%); 
@@ -127,5 +122,22 @@ function togglePlay() {
 
     button.stop.active {
         background: red;
+    }
+     /* New styles for Mute Group Masters */
+     .mute-group-master h3 {
+        font-size: 1.2em;
+        margin-bottom: 10px;
+    }
+
+    .mute-group-master button {
+        color: white;
+        background-color: rgb(179, 2, 2); /* Blue color for master buttons */
+        margin-right: 5px;
+    }
+
+    .mute-group h4 {
+        font-size: 1.1em;
+        margin-top: 10px;
+        margin-bottom: 5px;
     }
 </style>

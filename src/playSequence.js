@@ -1,24 +1,10 @@
 
 import { getBufferedAudio } from './audioLoader.js';
-import audioContext from './audioContext.js';
-console.log('audioContext initialized in playSequence.');
-import { gainNode } from './audioContext.js';
-import { muteState } from './store.js';
-
-let currentMuteState = false;
-muteState.subscribe(value => currentMuteState = value);  // Subscribe to the muteState store
-
+import audioContext, { gainNode } from './audioContext.js';
 
 let isPlaying = false;
 let intervalId;
-let currentStep = 1; // <-- Add this line
-
-
-
-
-
-
-
+let currentStep = 1;
 
 function playSample(volume) {
     console.log('AudioContext state before playing:', audioContext.state);
@@ -32,12 +18,6 @@ function playSample(volume) {
     }
 
     console.log('Buffer to play:', buffer);
-    // Check the mute state and set the gain value
-    if (currentMuteState) { // <-- Use currentMuteState here
-        gainNode.gain.value = 0;
-    } else {
-        gainNode.gain.value = volume / 100;
-    }
 
     const source = audioContext.createBufferSource();
     source.buffer = buffer;
@@ -45,12 +25,8 @@ function playSample(volume) {
     console.log('Buffer duration:', buffer.duration);
     console.log('Buffer sampleRate:', buffer.sampleRate);
     console.log('Buffer numberOfChannels:', buffer.numberOfChannels);
-
-    // Volume control
-    gainNode.gain.value = volume / 100;  // Assuming volume is between 0 and 100
-    console.log('Volume set to:', gainNode.gain.value);
     
-    source.connect(gainNode); // Connect the source to the gain node
+    source.connect(gainNode);  // Connect the source to the gain node
 
     console.log('About to play sample...');
     source.start(0);    
@@ -76,11 +52,7 @@ function playStep(steps, currentStep, volume) {
 
 
 
-export function startSequence(steps, initialStep, volume) {
-    if (currentMuteState) {  // Check the global mute state
-        gainNode.gain.value = 0; // Ensure mute is active if muteActive is true
-    }
-    
+export function startSequence(steps, initialStep, volume) { 
     if (!isPlaying) {
         currentStep = initialStep; // <-- Add this line
         isPlaying = true;

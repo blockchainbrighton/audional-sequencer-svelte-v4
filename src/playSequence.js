@@ -2,7 +2,7 @@
 import { getBufferedAudio } from './audioLoader.js';
 import audioContext from './audioContext.js';
 console.log('audioContext initialized in playSequence.');
-import { gainNode } from './audioManager.js';
+import { gainNode } from './audioContext.js';
 import { muteState } from './store.js';
 
 let currentMuteState = false;

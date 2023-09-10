@@ -525,7 +525,7 @@ var app = (function () {
 
     // Check the mute state immediately after creating the context
     if (get_store_value(muteState)) {
-        newAudioContext.gain.value = 0;
+        audioContext.gain.value = 0;
     }
 
     document.addEventListener('click', function() {
@@ -543,6 +543,15 @@ var app = (function () {
         }).catch(err => {
             console.error("Failed to resume AudioContext:", err);
         });
+    }
+
+    // Create a GainNode for the entire application
+    const gainNode = audioContext.createGain();
+    gainNode.connect(audioContext.destination);
+
+    // Check the mute state immediately after creating the GainNode
+    if (get_store_value(muteState)) {
+        gainNode.gain.value = 0;
     }
 
     const audioBuffers = new Map();
@@ -620,15 +629,6 @@ var app = (function () {
 
     function getBufferedAudio() {
         return audioBuffers.get(sampleUrl);
-    }
-
-    // Create a GainNode for the entire application
-    const gainNode = audioContext.createGain();
-    gainNode.connect(audioContext.destination);
-
-    // Check the mute state immediately after creating the GainNode
-    if (get_store_value(muteState)) {
-        gainNode.gain.value = 0;
     }
 
     console.log('audioContext initialized in playSequence.');

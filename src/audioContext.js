@@ -7,7 +7,7 @@ console.log('audioContext initialized in audioContext.js.');
 
 // Check the mute state immediately after creating the context
 if (get(muteState)) {
-    newAudioContext.gain.value = 0;
+    audioContext.gain.value = 0;
 }
 
 document.addEventListener('click', function() {
@@ -27,4 +27,14 @@ if (audioContext.state !== "running") {
     });
 }
 
+// Create a GainNode for the entire application
+const gainNode = audioContext.createGain();
+gainNode.connect(audioContext.destination);
+
+// Check the mute state immediately after creating the GainNode
+if (get(muteState)) {
+    gainNode.gain.value = 0;
+}
+
 export default audioContext;
+export { gainNode };

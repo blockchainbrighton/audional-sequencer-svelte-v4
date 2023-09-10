@@ -1,7 +1,7 @@
 <script>
     import { loadSample } from './audioLoader.js';
     import { steps, muteState } from './store.js'; // <-- Import muteState
-    import { gainNode } from './audioManager.js';
+    import { gainNode } from './audioContext.js';
 
 
   
